@@ -1,75 +1,54 @@
 <?php
 get_header();
 ?>
-
 <body <?php body_class(); ?>>
+<?php get_template_part("/template-parts/hero") ?>
+ <section class="blog-list px-3 py-5 p-md-5">
+		    <div class="container">
+			    <div class="row">
 
-<header class="header text-center">
-    <a class="site-title pt-lg-4 mb-0" href="<?php echo site_url() ?>"><?php bloginfo( "name" ); ?></a>
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-                aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div id="navigation" class="collapse navbar-collapse flex-column">
-			<?php
-			if ( current_theme_supports( "custom-logo" ) ) {
-				$logo_id = get_theme_mod( 'custom_logo' );
-				$logo    = wp_get_attachment_image_src( $logo_id );
-			}
-			?>
-            <img class="mb-3 mx-auto logo" src="<?php echo $logo[0]; ?>" alt="logo">
-
-
-			<?php
-			wp_nav_menu(
-				array(
-					'menu'           => 'primary',
-					'container'      => '',
-					'theme_location' => 'primary',
-					'items_wrap'     => '<ul id="" class="navbar-nav flex-column text-sm-center text-md-left">%3$s</ul>',
-				)
-			);
-			?>
-            <hr>
-            <ul class="social-list list-inline py-3 mx-auto">
-                <li class="list-inline-item"><a href="#"><i class="fab fa-twitter fa-fw"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in fa-fw"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-github-alt fa-fw"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-stack-overflow fa-fw"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fab fa-codepen fa-fw"></i></a></li>
-            </ul>
-
-        </div>
-    </nav>
-</header>
-
-<div class="main-wrapper">
-    <header class="page-title theme-bg-light text-center gradient py-5">
-        <h1 class="heading"><?php the_title(); ?></h1>
-    </header>
-    <article class="content px-3 py-5 p-md-5">
-		<?php
-		if ( have_posts() ) {
-			while ( have_posts() ) {
-				the_post();
-				the_content();
-			}
-		}
+                    	<?php
+	while (have_posts()){
+		the_post();
 		?>
-    </article>
-    <footer class="footer text-center py-2 theme-bg-dark">
+					<div class="col-md-4 mb-3">
+						<div class="card blog-post-card">
+                               <?php
+                        if(has_post_thumbnail()){
 
-        <p class="copyright"><a href="https://youtube.com/FollowAndrew">FollowAndrew</a></p>
+                            ?>
+                            <a class="more-link" href="<?php echo get_post_permalink(); ?>"><?php the_post_thumbnail('post-thumbnail',array('class' => 'img-fluid')); ?></a>
+                       <?php
+                        }
+                        ?>
+							<div class="card-body">
+								<h5 class="card-title"><a class="theme-link" href="<?php echo get_post_permalink(); ?>"><?php the_title(); ?></a></h5>
+								<p class="card-text"><?php the_excerpt(); ?></p>
+								<p class="mb-0"><a class="more-link" href="<?php echo get_post_permalink(); ?>">Read more →</a></p>
 
-    </footer>
+							</div>
+							<div class="card-footer">
+								<small class="text-muted">Published <?php echo human_time_diff( get_the_time('U'), current_time('timestamp') ) . '&nbsp;ago'; ?></small>
+							</div>
+						</div><!--//card-->
+                    </div>
+<?php
+	}
+	?>
+                </div>
+			    <nav class="pagination">
+                         <?php
+            the_posts_pagination(array(
+                    "screen_reader_text"=>' ',
+                    "prev_text"=>'New Posts',
+                    "next_text"=>'Old Posts'
+            ));
 
-</div>
+            ?>
+				</nav>
 
-
+		    </div>
+	    </section>
 <?php
 get_footer();
 ?>
